@@ -2,8 +2,15 @@ import express from 'express';
 import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
 import contactsRouter from './routes/contacts.js';
+import connectDB from './config/db.js';
 
 const app = express();
+
+// Connect Database
+connectDB();
+
+// Init Middleware
+app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) =>
   res.json({ msg: 'Welcome to the ContactKeepr API...' })
