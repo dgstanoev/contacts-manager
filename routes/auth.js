@@ -4,6 +4,7 @@ import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import auth from '../middleware/auth.js';
 
 const authRouter = express.Router();
 
@@ -11,8 +12,14 @@ const authRouter = express.Router();
 // @desc    Get logged in user
 // @access  Private
 authRouter
-  .get('/', (req, res) => {
-    res.send('Get logged in user');
+  .get('/', auth, async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).select('-password');
+      res.json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   })
 
   // @route   POST api/auth
@@ -45,7 +52,7 @@ authRouter
         }
 
         const payload = {
-          user: user.id,
+          id: user.id,
         };
 
         jwt.sign(
