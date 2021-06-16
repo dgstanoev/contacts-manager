@@ -6,17 +6,18 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS,
+  CLEAR_ERRORS
 } from '../types';
 
-export default function authReducer(state, action) {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (state, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: action.payload,
+        user: action.payload
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -25,7 +26,7 @@ export default function authReducer(state, action) {
         ...state,
         ...action.payload,
         isAuthenticated: true,
-        loading: false,
+        loading: false
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -38,14 +39,14 @@ export default function authReducer(state, action) {
         isAuthenticated: false,
         loading: false,
         user: null,
-        error: action.payload,
+        error: action.payload
       };
     case CLEAR_ERRORS:
       return {
         ...state,
-        error: null,
+        error: null
       };
     default:
       return state;
   }
-}
+};

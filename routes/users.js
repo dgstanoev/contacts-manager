@@ -1,15 +1,15 @@
 import express from 'express';
-import User from '../models/User.js';
-import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import { body, validationResult } from 'express-validator';
+import User from '../models/User.js';
 
 const usersRouter = express.Router();
 
-// @route   POST api/users
-// @desc    Register a user
-// @access  Public
+// @route     POST api/users
+// @desc      Regiter a user
+// @access    Public
 usersRouter.post(
   '/',
   [
@@ -25,6 +25,7 @@ usersRouter.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     const { name, email, password } = req.body;
 
     try {
@@ -41,17 +42,23 @@ usersRouter.post(
       });
 
       const salt = await bcrypt.genSalt(10);
+
       user.password = await bcrypt.hash(password, salt);
+
       await user.save();
 
       const payload = {
-        id: user.id,
+        user: {
+          id: user.id,
+        },
       };
 
       jwt.sign(
         payload,
         config.get('jwtSecret'),
-        { expiresIn: 360000 },
+        {
+          expiresIn: 360000,
+        },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
