@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://dimitar:tAD7XyoZRf3LEaQS@contactkeeper.fnkyb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jwtSecret": "s3cr3t_k3y_"
+}
